@@ -1,9 +1,7 @@
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 public abstract class Controller
 {
-	private static TimeAnalyzer ta = new NanoTimeAnalyzer("MyAnalyzer");
 	private static PrintWriter outStrm = new PrintWriter(System.out,true);
 	private static PrintWriter errStrm = new PrintWriter(System.err,true);
 	private static class util
@@ -114,7 +112,6 @@ public abstract class Controller
 				case 'Y': outStrm.println("Saving Data");
 				Airport_Manager.refresh();
 				outStrm.println("Thank You For Using This System");
-				System.out.println("Time Taken = "+ta.getElapsedTime(TimeUnit.SECONDS));
 				System.exit(exitCode);
 				case 'n':
 				case 'N': outStrm.println("Returning To Current Task");
@@ -126,8 +123,7 @@ public abstract class Controller
 	}
 	@SuppressWarnings("resource")
 	public static void main(String[] args){
-		ta.start();
-		try{
+		do{
 			try{
 				outStrm.println("Welcome To Aviation Management System");
 				outStrm.println("Today's Date = "+new DateInfo().getDate());
@@ -172,7 +168,6 @@ public abstract class Controller
 						{errStrm.println(e2+"\nEnter a Value Between 1 and "+c);}
 						}while(true);
 						if(ch==c){
-							ta.stop();
 							util.exit(0);
 						}
 						switch(ch)
@@ -411,11 +406,7 @@ public abstract class Controller
 			catch(Exception e)
 			{outStrm.println("Encountered An Exception");
 			e.printStackTrace();
-			util.exit(47);
-			main(new String[10]);}
-		}
-		finally{ta.stop();
-		System.out.println("Time Taken = "+ta.getElapsedTime(TimeUnit.SECONDS));
-		}
+			util.exit(47);}
+	}while(true);
 	}
 }
